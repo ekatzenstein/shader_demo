@@ -16,9 +16,15 @@
     //set cross origin is necessary for this demo (we haven't setup a server), be sure to use wikimedia images
     texLoader.setCrossOrigin( 'Anonymous');
     //define path to texture and load
-    var imgUrlA = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISS-32_American_EVA_b3_Aki_Hoshide.jpg/1280px-ISS-32_American_EVA_b3_Aki_Hoshide.jpg"
+    var imgUrlA = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/ISS-32_American_EVA_b3_Aki_Hoshide.jpg/1280px-ISS-32_American_EVA_b3_Aki_Hoshide.jpg" //spaceman
+
+    var imgUrlB = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/%D0%9F%D1%80%D0%BE%D0%B2%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9_%D0%BF%D1%83%D1%87%D0%BE%D0%BA_Pteridium_aquilinum.JPG/1280px-%D0%9F%D1%80%D0%BE%D0%B2%D0%BE%D0%B4%D1%8F%D1%89%D0%B8%D0%B9_%D0%BF%D1%83%D1%87%D0%BE%D0%BA_Pteridium_aquilinum.JPG" //cells
+
+    var imgUrlC = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Aiga_drinkingfountain_inv.svg/613px-Aiga_drinkingfountain_inv.svg.png"; //spiral gradient
 
     var texture = texLoader.load(imgUrlA)
+    var texture2 = texLoader.load(imgUrlB)
+    var texture3 = texLoader.load(imgUrlC)
 
     var material = new THREE.ShaderMaterial({
         //uniforms are a very powerful part of shaders, allowing us to define parameters on the fly for both vertex and fragment shaders.
@@ -26,6 +32,14 @@
             texture: {
                 type: 't',
                 value: texture
+            },
+            texture2: { //just adding another texture
+                type: 't',
+                value: texture2
+            },
+            texture3: { //just adding another texture
+                type: 't',
+                value: texture3
             }
         },
         vertexShader: vertexShader,
