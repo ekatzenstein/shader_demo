@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html>
-<!--The head is used to define the metadata.
-Nothing in here is rendered, so we'll use the head to
-import libraries, styles, and define shaders-->
 <head>
-
-    <!--Import Style Sheet-->
     <link rel="stylesheet" href="css/style.css">
-
-    <!--Import three.js library-->
     <script src="js/lib/three.min.js"></script>
 
-    <!--Define Vertex Shader. Notice the type is x-shader/x-vertex.
-    This translates to a vertex shader in GLSL language-->
     <script type="x-shader/x-vertex" id="vertexShader">
         varying vec2 vUV;
         void main() {
@@ -22,69 +13,28 @@ import libraries, styles, and define shaders-->
         }
     </script>
 
-    <!--Define Fragment Shader. Notice the type is x-shader/x-fragment.
-    This translates to a vertex shader in GLSL language-->
     <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform sampler2D texture; //fancy new uniform imported to our fragment shader
         varying vec2 vUV;
         void main() {
-            gl_FragColor= vec4(vUV.x,vUV.y,0.,1.);
+            vec4 sampleColor = vec4(texture2D(texture,vUV).rgb,1.0);
+            //gl_FragColor= vec4(vUV.x,vUV.y,0.,1.); //commenting out hello world example to show difference below
+            gl_FragColor = sampleColor;
         }
     </script>
 </head>
 
-<!--In the body tag, we're defining everything that appears on the page.-->
 <body>
-    <!--This div tag is a simple header to be placed over the canvas. You can remove it or add to it.
-    The id of 'header' is important here because we've defined a style in css related to it-->
     <div id="header">
-        <!--<h1> is the 'biggest' header tab.
-        This is equivalent to "# Mode Lab" in markdown format (like the Dynamo Primer on Gitbook)-->
         <h1>Mode Lab</h1>
-        <!--<p> is a paragraph tab. Humble text.-->
         <p>Shader Demo</p>
-    <!--The </div> marks the end of the div with the 'header' id-->
     </div>
-    <!--This div has an id of "threeDiv". We'll use this for not only styling, but also to connect to it with javascript-->
     <div id="threeDiv"></div>
 </body>
 
 <script>
-    //select div with the 'threeDiv' id.
-    var container = document.getElementById('threeDiv');
-    //define a new THREE renderer
-    var renderer = new THREE.WebGLRenderer();
-    //define the size of the renderer (we are filling the page with window.innerWidth/Height)
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    //append this render to the threeDiv. (We are adding a canvas element as a child of the div under the hood).
-    container.appendChild(renderer.domElement);
-
-
-    //Create scene
-    var scene = new THREE.Scene();
-    //Define camera
-    var camera = new THREE.OrthographicCamera(1 / -2, 1 / 2, 1 / 2, 1 / -2, -10, 10);
-    //Define plane to fill camera scene
-    var plane = new THREE.PlaneBufferGeometry(1, 1);
-
-    //query vertex shader text (notice the id attribute in our GLSL above)
-    var vertexShader = document.getElementById('vertexShader').textContent;
-    //query fragment shader text (notice the id attribute in our GLSL above)
-    var fragmentShader = document.getElementById('fragmentShader').textContent;
-
-    //define shader material. you can also combine this with other threejs material properties
-    var material = new THREE.ShaderMaterial({
-        uniforms: {},
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader
-    });
-
-    //combine the plane geometry and the material into one mesh
-    var planeMesh = new THREE.Mesh(plane, material);
-    //add mesh to scene
-    scene.add(planeMesh);
-    //render scene (we are only rendering once for now);
-    renderer.render(scene, camera);
-
+//we removed this script and put it in the js folder to keep everything nice and separate (shaderScene.js)
 </script>
+<script src="js/shaderScene.js"></script>
 
 </html>
