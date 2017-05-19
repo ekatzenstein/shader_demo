@@ -17,24 +17,25 @@
         uniform sampler2D texture;
         uniform sampler2D texture2;
         uniform sampler2D texture3;
+        uniform float time;
+        uniform float mouseX;
         varying vec2 vUV;
         void main() {
             vec4 sampleColor = vec4(texture2D(texture,vUV).rgb,1.0);
             vec4 sampleColor2 = vec4(texture2D(texture2,vUV).rgb,1.0);
             vec4 canvasColor= vec4(vUV.x,vUV.y,0.,1.); //commenting out hello world example to show difference below
 
+            vec4 mixA = mix(sampleColor, sampleColor2,vUV.y-time);
 
-            vec4 mixA = mix(sampleColor, sampleColor2,vUV.y); //mix! https://thebookofshaders.com/glossary/?search=mix
-            vec4 mixB = mix(sampleColor, sampleColor2,smoothstep(0.,1.,vUV.y)); //smoothstep! https://thebookofshaders.com/glossary/?search=smoothstep
-            vec4 mixC = mix(mixB,canvasColor,vUV.x);
+            vec4 mixB = vec4(1.);
+            if(vUV.x>mouseX){
+                mixB = sampleColor;
+            }
+            else{
+                mixB = mixA;
+            }
 
-            vec4 sampleColor3 = vec4(texture2D(texture3,vUV).rgb,1.0);
-            float averageBW = (sampleColor3.r+sampleColor3.g+sampleColor3.b)/3.;
-
-            vec4 mixD = mix(sampleColor,sampleColor2,averageBW);
-            vec4 mixE = mix(sampleColor,canvasColor,averageBW);
-
-            gl_FragColor = mixE;
+            gl_FragColor = mixA;
         }
     </script>
 </head>

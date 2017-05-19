@@ -26,20 +26,31 @@
     var texture2 = texLoader.load(imgUrlB)
     var texture3 = texLoader.load(imgUrlC)
 
+    var time = 0; //initialize time value
+    var timeAdd = true; //intially ascending
+
+    var mousePositionX = 0; //intialize mouse position;
     var material = new THREE.ShaderMaterial({
-        //uniforms are a very powerful part of shaders, allowing us to define parameters on the fly for both vertex and fragment shaders.
         uniforms: {
             texture: {
                 type: 't',
                 value: texture
             },
-            texture2: { //just adding another texture
+            texture2: {
                 type: 't',
                 value: texture2
             },
-            texture3: { //just adding another texture
+            texture3: {
                 type: 't',
                 value: texture3
+            },
+            time: { //adding time variable
+                type: 'f',
+                value: time
+            },
+            mouseX: { //adding time variable
+                type: 'f',
+                value: mousePositionX
             }
         },
         vertexShader: vertexShader,
@@ -48,14 +59,31 @@
 
     var planeMesh = new THREE.Mesh(plane, material);
     scene.add(planeMesh);
-    //renderer.render(scene, camera); //this is to render once, we want to render repeatedly so we're going to do the below instead
     animate();
 
+    document.onmousemove=function(e){
+        material.uniforms.mouseX.value = e.clientX/window.innerWidth;
+    }
+
     function animate(){
-        requestAnimationFrame(animate); //this keeps the loop going
+        requestAnimationFrame(animate);
         render();
     }
 
     function render(){
-        renderer.render(scene, camera); //now we plug in the render function
+        //logic to pulsate time
+        if(time >= 1){
+            timeAdd=false;
+        }
+        else if(time<=0){
+            timeAdd = true;
+        }
+        if(timeAdd){
+            time=time+.02;
+        }
+        else{
+            time=time-.02;
+        }
+        material.uniforms.time.value=time;
+        renderer.render(scene, camera);
     }
